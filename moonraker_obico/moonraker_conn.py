@@ -143,7 +143,8 @@ class MoonrakerConn:
     @backoff.on_exception(backoff.expo, Exception, max_value=60)
     @backoff.on_predicate(backoff.expo, max_value=60)
     def wait_for_klippy_ready(self):
-        return self.get_server_info().get("klippy_state") == 'ready'
+        state = self.get_server_info().get("klippy_state")
+        return state in ('ready', 'error')
 
     @backoff.on_exception(backoff.expo, Exception, max_value=60)
     def find_all_heaters(self):
